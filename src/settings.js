@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Vue Element Admin',
+  title: '停车管理系统',
 
   /**
    * @type {boolean} true | false
@@ -18,12 +18,6 @@ module.exports = {
    * @description Whether fix the header
    */
   fixedHeader: false,
-
-  /**
-   * @type {boolean} true | false
-   * @description Whether show the logo in sidebar
-   */
-  sidebarLogo: false,
 
   /**
    * @type {string | array} 'production' | ['production', 'development']
