@@ -34,15 +34,15 @@ export default {
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
-      // if set path, the sidebar will highlight the path you set
+      // 如果设置路径，侧边栏就会高亮设置的路径
       if (meta.activeMenu) {
         return meta.activeMenu
       }
       return path
     },
-    // showLogo() {
-    //   return this.$store.state.settings.sidebarLogo
-    // },
+    showLogo() {
+      return this.$store.state.settings.sidebarLogo
+    },
     variables() {
       return variables
     },

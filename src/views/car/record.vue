@@ -3,8 +3,8 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.title"
-        placeholder="用户名"
-        style="width: 180px;"
+        placeholder="车牌号"
+        style="width: 180px"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
@@ -17,18 +17,9 @@
       >
         搜索
       </el-button>
-      <el-button
-        class="filter-item"
-        style="margin-left: 10px;"
-        type="primary"
-        icon="el-icon-edit"
-        @click="handleCreate"
-      >
-        添加
-      </el-button>
     </div>
 
-    <!-- 用户表格 -->
+    <!-- 车辆表格 -->
     <el-table
       :key="tableKey"
       v-loading="listLoading"
@@ -36,63 +27,37 @@
       border
       fit
       highlight-current-row
-      style="width: 100%;"
+      style="width: 100%"
     >
-      <el-table-column
-        label="用户ID"
-        prop="id"
-        align="center"
-        min-width="8%"
-      >
-        <template slot-scope="{row}">
+      <el-table-column label="车辆ID" prop="id" align="center" min-width="8%">
+        <template slot-scope="{ row }">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="用户名"
-        min-width="15%"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.username }}</span>
+      <el-table-column label="车牌号" min-width="15%" align="center">
+        <template slot-scope="{ row }">
+          <span v-if="row.plateNumber === 'null'"> 未识别 </span>
+          <span v-else>{{ row.plateNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="密码"
-        min-width="15%"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.password }}</span>
+      <el-table-column label="类型" min-width="12%" align="center">
+        <template slot-scope="{ row }">
+          <span> {{ row.color }} </span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="状态"
-        min-width="8%"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span v-if="row.status === 0">正常</span>
-          <span v-else>封禁</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="角色"
-        min-width="12%"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span v-if="row.roleId === 2">超级管理员</span>
-          <span v-if="row.roleId === 1">普通用户</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="创建时间"
-        min-width="18%"
-        align="center"
-      >
-        <template slot-scope="{row}">
+      <el-table-column label="驶入时间" min-width="18%" align="center">
+        <template slot-scope="{ row }">
           <span>{{ row.createTime | parseTime(row.createTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="离开时间" min-width="18%" align="center">
+        <template slot-scope="{ row }">
+          <span>{{ row.leftTime | parseTime(row.leftTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="花费" min-width="12%" align="center">
+        <template slot-scope="{ row }">
+          <span>{{ row.cost }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -101,19 +66,15 @@
         min-width="24%"
         class-name="small-padding fixed-width"
       >
-        <template slot-scope="{row,$index}">
-          <el-button
-            type="primary"
-            size="mini"
-            @click="handleUpdate(row)"
-          >
+        <template slot-scope="{ row, $index }">
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
           <el-button
-            v-if="row.status!='deleted'"
+            v-if="row.status != 'deleted'"
             size="mini"
             type="danger"
-            @click="handleDelete(row,$index)"
+            @click="handleDelete(row, $index)"
           >
             删除
           </el-button>
@@ -121,100 +82,66 @@
       </el-table-column>
     </el-table>
 
+    <!-- 页面 -->
     <pagination
-      v-show="total>0"
+      v-show="total > 0"
       :total="total"
       :page.sync="listQuery.page"
       :limit.sync="listQuery.limit"
       @pagination="getList"
     />
 
-    <el-dialog
-      :title="textMap[dialogStatus]"
-      :visible.sync="dialogFormVisible"
-    >
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
         :model="temp"
         label-position="left"
         label-width="80px"
-        style="width: 280px; margin-left:50px;"
+        style="width: 280px; margin-left: 50px"
         size="medium"
       >
-        <el-form-item
-          label="用户名："
-          prop="username"
-        >
+        <el-image v-if="dialogStatus === 'update'" fit="contain" :src="imgUrl">
+          <div slot="error" class="image-slot">
+            <i class="el-icon-picture-outline"></i>
+          </div>
+        </el-image>
+        <el-form-item label="车牌号：" prop="plateNumber">
           <el-input
-            v-model="temp.username"
+            v-model="temp.plateNumber"
             size="medium"
-            placeholder="请输入用户名"
+            placeholder="请输入车牌号"
           />
         </el-form-item>
-        <el-form-item
-          label="密码："
-          prop="password"
-        >
+        <el-form-item label="类型：" prop="plateNumber">
           <el-input
-            v-model="temp.password"
+            v-model="temp.color"
             size="medium"
-            placeholder="请输入密码"
+            placeholder="请输入车牌类型"
           />
-        </el-form-item>
-
-        <el-form-item label="角色：">
-          <el-select
-            v-model="temp.roleId"
-            class="filter-item"
-            placeholder="默认为普通用户"
-          >
-            <el-option
-              v-for="item in roleOptions"
-              :key="item.roleId"
-              :label="item.roleName"
-              :value="item.roleId"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="状态：">
-          <el-select
-            v-model="temp.status"
-            class="filter-item"
-            placeholder="默认为正常状态"
-          >
-            <el-option
-              v-for="item in statusOptions"
-              :key="item.statusId"
-              :label="item.statusName"
-              :value="item.statusId"
-            />
-          </el-select>
         </el-form-item>
       </el-form>
-      <div
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false"> 取消 </el-button>
         <el-button
           type="primary"
-          @click="dialogStatus==='create'?createData():updateData()"
+          @click="dialogStatus === 'create' ? createData() : updateData()"
         >
           确认
         </el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
 <script>
-import { fetchUserList, updateUser, deleteUser, createUser } from '@/api/user'
+import {
+  fetchRecordList,
+  deleteRecord,
+  createRecord,
+  updateRecord
+} from '@/api/car'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -241,32 +168,9 @@ export default {
         page: 1,
         limit: 20
       },
-      roleOptions: [
-        {
-          roleId: 1,
-          roleName: '普通用户'
-        },
-        {
-          roleId: 2,
-          roleName: '超级用户'
-        }
-      ],
-      statusOptions: [
-        {
-          statusId: 0,
-          statusName: '正常'
-        },
-        {
-          statusId: 1,
-          statusName: '封禁'
-        }
-      ],
       temp: {
-        id: undefined,
-        username: '',
-        password: '',
-        roleId: 1,
-        status: 0
+        plateNumber: '',
+        color: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -277,16 +181,10 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        username: [{ required: true, message: '此为必填项', trigger: 'blur' }],
-        password: [
-          {
-            required: true,
-            message: '此为必填项',
-            trigger: 'blur'
-          }
+        plateNumber: [
+          { required: true, message: '此为必填项', trigger: 'blur' }
         ],
-        roleId: [{ required: true, message: '此为必选项', trigger: 'change' }],
-        status: [{ required: true, message: '此为必选项', trigger: 'change' }]
+        color: [{ required: true, message: '此为必填项', trigger: 'blur' }]
       }
     }
   },
@@ -296,7 +194,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = false
-      fetchUserList(this.listQuery).then(response => {
+      fetchRecordList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         // Just to simulate the time of the request
@@ -312,10 +210,7 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        username: '',
-        password: '',
-        roleId: 1,
-        status: 0
+        username: ''
       }
     },
     handleCreate() {
@@ -329,13 +224,13 @@ export default {
     createData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          createUser(this.temp)
+          createRecord(this.temp)
             .then(() => {
               this.getList()
               this.dialogFormVisible = false
               this.$notify({
                 title: '成功',
-                message: '用户添加成功',
+                message: '临时停车记录添加成功',
                 type: 'success',
                 duration: 2000
               })
@@ -348,6 +243,10 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      let fileUrl = this.temp.fileUrl
+      let index = fileUrl.lastIndexOf('/')
+      var fileName = fileUrl.substring(index + 1, fileUrl.length)
+      this.imgUrl = 'http://localhost:8080/upload_images/' + fileName
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -358,7 +257,7 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          updateUser(tempData).then(() => {
+          updateRecord(tempData).then(() => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, this.temp)
             this.dialogFormVisible = false
@@ -372,15 +271,15 @@ export default {
         }
       })
     },
-    // 删除用户
+    // 删除记录
     handleDelete(row, $index) {
-      this.$confirm('确定要删除该用户吗？', '警告', {
+      this.$confirm('确定要删除该记录吗？', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(async () => {
-          await deleteUser(row.id).then(() => {
+          await deleteRecord(row.id).then(() => {
             this.list.splice($index, 1)
             this.$message({
               type: 'success',

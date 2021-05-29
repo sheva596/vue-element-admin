@@ -3,19 +3,25 @@ module.exports = {
 
   /**
    * @type {boolean} true | false
-   * @description Whether show the settings right-panel
+   * @description 右侧是否显示设置菜单
    */
   showSettings: true,
 
   /**
    * @type {boolean} true | false
-   * @description Whether need tagsView
+   * @description 是否显示菜单logo
+   */
+  showSidebarLogo: true,
+
+  /**
+   * @type {boolean} true | false
+   * @description 是否需要导航栏
    */
   tagsView: true,
 
   /**
    * @type {boolean} true | false
-   * @description Whether fix the header
+   * @description 是否需要修正头部
    */
   fixedHeader: false,
 

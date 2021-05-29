@@ -82,26 +82,49 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/user/list',
+    path: '/user',
     component: Layout,
     children: [
       {
-        path: 'index',
+        path: 'list',
         component: () => import('@/views/people/index'),
         name: 'People',
-        meta: { title: '用户管理', icon: 'peoples', affix: true }
+        meta: { title: '用户管理', icon: 'peoples' }
       }
     ]
   },
   {
-    path: '/car/list',
+    path: '/car',
+    component: Layout,
+    redirect: 'noRedirect',
+    meta: {
+      title: '车辆管理',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'parking',
+        component: () => import('@/views/car/parking'),
+        name: 'Car',
+        meta: { title: '正在停车' }
+      },
+      {
+        path: 'record',
+        component: () => import('@/views/car/record'),
+        name: 'Car',
+        meta: { title: '历史记录' }
+      },
+    ]
+  },
+   {
+    path: '/picture',
     component: Layout,
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/car/index'),
-        name: 'Car',
-        meta: { title: '停车记录', icon: 'chart', affix: true }
+        path: 'upload',
+        component: () => import('@/views/components-demo/dropzone'),
+        name: 'DropzoneDemo',
+        meta: { title: '图片上传', icon: 'example' }
       }
     ]
   },
@@ -120,11 +143,11 @@ export const constantRoutes = [
     ]
   }
 ]
-
 /**
  * 异步路由
  * 需要根据用户角色动态加载的理由
  */
+/** 图标 **/
 export const asyncRoutes = [
   {
     path: '/icon',
@@ -143,19 +166,7 @@ export const asyncRoutes = [
   componentsRouter,
   chartsRouter,
 
-  {
-    path: '/error-log',
-    component: Layout,
-    children: [
-      {
-        path: 'log',
-        component: () => import('@/views/error-log/index'),
-        name: 'ErrorLog',
-        meta: { title: '错误日志', icon: 'bug' }
-      }
-    ]
-  },
-
+  /** 主题 **/
   {
     path: '/theme',
     component: Layout,

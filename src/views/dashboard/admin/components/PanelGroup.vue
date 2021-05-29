@@ -6,23 +6,29 @@
           <svg-icon icon-class="peoples" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">
-            New Visits
-          </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <div class="card-panel-text">Users</div>
+          <count-to
+            :start-val="0"
+            :end-val="20"
+            :duration="1"
+            class="card-panel-num"
+          />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('messages')">
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
+        <div class="card-panel-icon-wrapper icon-parking">
+          <svg-icon icon-class="eye-open" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">
-            Messages
-          </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <div class="card-panel-text">Parking</div>
+          <count-to
+            :start-val="0"
+            :end-val="360"
+            :duration="10"
+            class="card-panel-num"
+          />
         </div>
       </div>
     </el-col>
@@ -32,23 +38,29 @@
           <svg-icon icon-class="money" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">
-            Purchases
-          </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <div class="card-panel-text">Income</div>
+          <count-to
+            :start-val="0"
+            :end-val="18000"
+            :duration="1200"
+            class="card-panel-num"
+          />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('shoppings')">
-        <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+        <div class="card-panel-icon-wrapper icon-records">
+          <svg-icon icon-class="chart" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">
-            Shoppings
-          </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <div class="card-panel-text">Records</div>
+          <count-to
+            :start-val="0"
+            :end-val="5000"
+            :duration="15"
+            class="card-panel-num"
+          />
         </div>
       </div>
     </el-col>
@@ -86,8 +98,8 @@ export default {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
 
     &:hover {
       .card-panel-icon-wrapper {
@@ -98,7 +110,7 @@ export default {
         background: #40c9c6;
       }
 
-      .icon-message {
+      .icon-parking {
         background: #36a3f7;
       }
 
@@ -106,8 +118,8 @@ export default {
         background: #f4516c;
       }
 
-      .icon-shopping {
-        background: #34bfa3
+      .icon-records {
+        background: #34bfa3;
       }
     }
 
@@ -115,7 +127,7 @@ export default {
       color: #40c9c6;
     }
 
-    .icon-message {
+    .icon-parking {
       color: #36a3f7;
     }
 
@@ -123,8 +135,8 @@ export default {
       color: #f4516c;
     }
 
-    .icon-shopping {
-      color: #34bfa3
+    .icon-records {
+      color: #34bfa3;
     }
 
     .card-panel-icon-wrapper {
@@ -160,7 +172,7 @@ export default {
   }
 }
 
-@media (max-width:550px) {
+@media (max-width: 550px) {
   .card-panel-description {
     display: none;
   }
